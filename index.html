@@ -1,0 +1,131 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ItineraApp</title> 
+
+<meta name="description" content="">
+<meta name="keyword" content="">     
+<meta name="HandheldFriendly" content="true" />
+<meta name="viewport" content="width=device-width, user-scalable=0, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+<!-- Javascripts -->
+<script src="assets/js/jquery-1.11.1.min.js"></script>
+<link rel="stylesheet" href="assets/css/jquery.mobile-1.4.4.min.css" />
+<script src="assets/js/jquery.mobile-1.4.4.min.js"></script>
+
+<script src="../phonegap.js"></script>
+
+<script src="checkcambiodomanda.js"></script>
+<!-- / Javascripts -->
+<style>
+body {
+-webkit-touch-callout:none;
+-webkit-user-select:none;
+-khtml-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
+user-select:none;
+-webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;	
+}
+
+.ui-page { background: #000000;}
+.myButton {
+	background-color:#44c767;
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+	border-radius:15px;
+	border:1px solid #18ab29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:arial;
+	font-size:17px;
+	padding:16px 65px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2f6627;
+
+}
+.myButton:hover {
+	background-color:#5cbf2a;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+</style>
+
+
+<script  type="text/javascript">
+    var appoggio="";
+    function leggiqrcode()
+   {  
+   cordova.plugins.barcodeScanner.scan(
+      function (result) {
+      	$("#TxtPIN").val(result.text);
+      }, 
+      function (error) {
+         alert("Errore nella scansione " + error);
+      }
+   );
+   }
+ 
+    function InviaDati(codice,testo) {
+
+	var testo  = $("#commmento").val()
+
+        var uri = 'http://www.luccaitinera-ticket.it/ComunicazioniPolizia.ashx?codice=' + codice + '&testo=' + unescape(testo) + '&token=1714itineralucca';
+
+	if (testo.trim() == '') return false;
+
+        $.ajax({
+            cache: false,
+            dataType: "text",
+            url: uri,
+            success: function(data) {
+		$("#risultato").html(data);
+		if (data =='OK') {
+			alert("Dati Inviati Correttamente");
+			$("#commmento").val('');
+			
+		} 
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+		alert('errore');
+            }
+        });
+    }
+
+    $(document).ready(function() {          
+		
+			 
+    });
+	
+</script>
+
+</head>
+<body bgcolor="#000000">
+<div data-role="page"  data-title="Prenota">
+
+<center>
+<br/>
+<a href="#" onclick="InviaDati();" class="myButton">LETTURA QRCODE</a>
+<br/>
+<br/>
+ <input id="TxtPIN" type="text" placeholder="CODICE" pattern="[A-Z 0-9]"  style="text-transform: uppercase;" /><br />
+<br/>
+<div id="padre" style="width;100%; height:300px; background-color:white; overflow-y: scroll;">
+Inserire Messaggio<br/>
+ <textarea  name="commmento" id="commmento" class="form-control" rows="8"></textarea>
+</div>
+<br/>
+<a href="#" onclick="InviaDati();" class="myButton">INVIA COMUNICAZIONE</a>
+</center>
+</div>
+  
+</body>
+</html>
