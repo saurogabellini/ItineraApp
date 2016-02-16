@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="assets/css/jquery.mobile-1.4.4.min.css" />
 <script src="assets/js/jquery.mobile-1.4.4.min.js"></script>
 
-<script src="../phonegap.js"></script>
+<script src="phonegap.js"></script>
 
 <script src="checkcambiodomanda.js"></script>
 <!-- / Javascripts -->
@@ -64,6 +64,7 @@ body {
     var appoggio="";
     function leggiqrcode()
    {  
+     alert('s');
    cordova.plugins.barcodeScanner.scan(
       function (result) {
       	$("#TxtPIN").val(result.text);
