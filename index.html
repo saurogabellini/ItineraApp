@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -64,7 +64,6 @@ body {
     var appoggio="";
     function leggiqrcode()
    {  
-     alert('s');
    cordova.plugins.barcodeScanner.scan(
       function (result) {
       	$("#TxtPIN").val(result.text);
@@ -74,12 +73,41 @@ body {
       }
    );
    }
+
+    function leggivoucher()	{
+
+	var codice = $("#TxtPIN").val()
+	$("#dativoucher").html("");
+	
+	if (isNaN(parseInt(codice))) { return false; }
+	if (parseInt(codice) ==0) { return false; }
+
+        var uri = 'https://permessi.metrosrl.it/voucher/DatiVoucher.ashx?codice=' + codice + '&token=1714itineralucca';
+
+        $.ajax({
+            cache: false,
+            dataType: "json",
+            url: uri,
+            success: function(data) {
+		var myhtml ="<font color=white>Data Dal : " + data.DataDal + "<br />Data Al :" + data.DataAl + "<br />";
+		myhtml = myhtml + "Targa :" + data.Targa + "<br />Ragione Sociale :" + data.RagioneSociale + "<br />";
+		myhtml = myhtml + "Sconti :" + data.Sconti + "<br/></font>"
+		$("#dativoucher").html(myhtml);
+		
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+		alert('errore' + textStatus);
+            }
+        });
+    }
+
  
-    function InviaDati(codice,testo) {
+    function InviaDati() {
 
 	var testo  = $("#commmento").val()
+	var codice = $("#TxtPIN").val()
 
-        var uri = 'http://www.luccaitinera-ticket.it/ComunicazioniPolizia.ashx?codice=' + codice + '&testo=' + unescape(testo) + '&token=1714itineralucca';
+        var uri = 'https://permessi.metrosrl.it/voucher/ComunicazioniPolizia.ashx?codice=' + codice + '&testo=' + unescape(testo) + '&token=1714itineralucca';
 
 	if (testo.trim() == '') return false;
 
@@ -117,11 +145,13 @@ body {
 <a href="#" onclick="leggiqrcode();" class="myButton">LETTURA QRCODE</a>
 <br/>
 <br/>
- <input id="TxtPIN" type="text" placeholder="CODICE" pattern="[A-Z 0-9]"  style="text-transform: uppercase;" /><br />
+<input id="TxtPIN" type="text" placeholder="CODICE" pattern="[A-Z 0-9]"  style="text-transform: uppercase;" /><input type="button" id="dati" value="Dati Voucher" onclick="leggivoucher();" >
+<div id="dativoucher"></div>
 <br/>
-<div id="padre" style="width;100%; height:300px; background-color:white; overflow-y: scroll;">
+<br/>
+<div id="padre" style="width;100%; height:200px; background-color:white; overflow-y: scroll;">
 Inserire Messaggio<br/>
- <textarea  name="commmento" id="commmento" class="form-control" rows="8"></textarea>
+ <textarea  name="commmento" id="commmento" class="form-control" rows="5"></textarea>
 </div>
 <br/>
 <a href="#" onclick="InviaDati();" class="myButton">INVIA COMUNICAZIONE</a>
@@ -130,3 +160,4 @@ Inserire Messaggio<br/>
   
 </body>
 </html>
+
