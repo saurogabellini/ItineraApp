@@ -26,8 +26,7 @@
         Metro Srl
     </author>
 
-
-<plugin name="cordova-plugin-zebra_printer_zpl" source="npm" />	    
+  
 <plugin name="cordova-plugin-barcodescanner" spec="0.7.4" />
 <plugin name="cordova-plugin-file-transfer" spec="1.6.3" />
 <plugin name="cordova-plugin-inappbrowser" spec="1.0.1" />
